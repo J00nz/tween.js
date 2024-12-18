@@ -414,6 +414,7 @@
      */
     var Tween = /** @class */ (function () {
         function Tween(object, group) {
+            if (group === void 0) { group = true; }
             this._isPaused = false;
             this._pauseStart = 0;
             this._valuesStart = {};

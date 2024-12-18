@@ -65,7 +65,7 @@ export class Tween<T extends UnknownProps = any> {
 	 * will be removed in the future.
 	 */
 	constructor(object: T, group: true)
-	constructor(object: T, group?: Group | true) {
+	constructor(object: T, group: Group | true = true) {
 		this._object = object
 
 		if (typeof group === 'object') {
