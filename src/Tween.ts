@@ -121,6 +121,8 @@ export class Tween<T extends UnknownProps = any> {
 			return this
 		}
 
+		this._group?.add(this) // Added due to memory-leak fix.
+
 		this._repeat = this._initialRepeat
 
 		if (this._reversed) {

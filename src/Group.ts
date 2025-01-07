@@ -39,8 +39,7 @@ export default class Group {
 
 	remove(...tweens: Tween[]): void {
 		for (const tween of tweens) {
-			// @ts-expect-error library internal access
-			tween._group = undefined
+			//tween._group = undefined // Outcommented due to memory-leakage.
 
 			delete this._tweens[tween.getId()]
 			delete this._tweensAddedDuringUpdate[tween.getId()]
@@ -78,7 +77,7 @@ export default class Group {
 				const tween = this._tweens[tweenIds[i]]
 				const autoStart = !preserve
 
-				if (tween && tween.update(time, autoStart) === false && !preserve) this.remove(tween)
+				if (tween && tween.update(time, autoStart) === false) this.remove(tween)
 			}
 
 			tweenIds = Object.keys(this._tweensAddedDuringUpdate)

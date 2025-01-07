@@ -270,8 +270,7 @@ define(['exports'], (function (exports) { 'use strict';
             }
             for (var _a = 0, tweens_2 = tweens; _a < tweens_2.length; _a++) {
                 var tween = tweens_2[_a];
-                // @ts-expect-error library internal access
-                tween._group = undefined;
+                //tween._group = undefined // Outcommented due to memory-leakage.
                 delete this._tweens[tween.getId()];
                 delete this._tweensAddedDuringUpdate[tween.getId()];
             }
@@ -296,7 +295,7 @@ define(['exports'], (function (exports) { 'use strict';
                 for (var i = 0; i < tweenIds.length; i++) {
                     var tween = this._tweens[tweenIds[i]];
                     var autoStart = !preserve;
-                    if (tween && tween.update(time, autoStart) === false && !preserve)
+                    if (tween && tween.update(time, autoStart) === false)
                         this.remove(tween);
                 }
                 tweenIds = Object.keys(this._tweensAddedDuringUpdate);
@@ -478,11 +477,13 @@ define(['exports'], (function (exports) { 'use strict';
             return this;
         };
         Tween.prototype.start = function (time, overrideStartingValues) {
+            var _a;
             if (time === void 0) { time = now(); }
             if (overrideStartingValues === void 0) { overrideStartingValues = false; }
             if (this._isPlaying) {
                 return this;
             }
+            (_a = this._group) === null || _a === void 0 ? void 0 : _a.add(this); // Added due to memory-leak fix.
             this._repeat = this._initialRepeat;
             if (this._reversed) {
                 // If we were reversed (f.e. using the yoyo feature) then we need to
